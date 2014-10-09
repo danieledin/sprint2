@@ -1,7 +1,8 @@
+#include "main.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
 
 
 typedef struct busLine
@@ -11,6 +12,41 @@ typedef struct busLine
   int weights[10];
  }busLine;
 
+
+Station *stationsOrder[26];
+
+
+
+
+Station stationExist(char* station, Station*){
+
+  for (i = 0; (station == Station[i].station || Station[i].station == NULL); i++) {
+    return &Station[i].station;
+  }
+  
+}   
+
+
+
+void createStation(Station, char* new) { // Bygger noder. 
+
+  int index = (65 - new[0]);
+
+  if (stationsOrder[index]) { // stationExist
+     stationsOrder[index] = malloc(sizeof(Station) * 20);
+
+     *stationsOrder[index] = malloc(sizeof(Station));
+
+  }
+  else {
+    
+    if (stationExist(new, *stationsOrder[index])){  // checks if NULL
+      
+    }
+    
+  }
+
+}
 
 void stringFix2(char* string)
 {
@@ -45,7 +81,7 @@ void stringFix1(char* string)
 
    
 }
-
+/*
 int getBusLines (char* filename, char* string, struct busLine testLine)
 {
   int currentBusLine;
@@ -54,8 +90,8 @@ int getBusLines (char* filename, char* string, struct busLine testLine)
   char station2[30];
   char teststation[50];
   int weight;
-  int i;
-
+  int i, j, len;
+  
   char test[30];
   char test2[30];
   
@@ -63,69 +99,72 @@ int getBusLines (char* filename, char* string, struct busLine testLine)
   FILE * file;
   file = fopen(filename, "r");
   if (file)
-    {
-      fgets(string, 100, file);
-      stringFix1(string);
-      stringFix2(string);
-      printf("%s\n", string);
+   
+      {
+	fgets(string, 100, file);
+	
 
+	stringFix1(string);
+	stringFix2(string);
+	printf("%s\n  %d", string, len);
 
-      sscanf(string, "%d%s%s%d",  &currentBusLine, station, station2, &testLine.weights[0]);
-      printf("Original values:\n%d\n%s\n%s\n%d\n", currentBusLine, station, station2, weight);
+	sscanf(string, "%d%s%s%d",  &currentBusLine, station, station2, &testLine.weights[0]);
+	printf("Original values:\n%d\n%s\n%s\n%d\n", currentBusLine, station, station2, weight);
 
-      testLine.line = currentBusLine;
-      //printf("%s\n", testLine.stations[0]);
+	testLine.line = currentBusLine;
+	//printf("%s\n", testLine.stations[0]);
             
-      nextBusLine = currentBusLine;
+	nextBusLine = currentBusLine;
 
-      for (i = 0; i < 9; i++) {
-	if ((testLine.stations[i] = malloc(sizeof(char) * 30)) == NULL) {
+	for (i = 0; i < 9; i++) {
+	  if ((testLine.stations[i] = malloc(sizeof(char) * 30)) == NULL) {
 	    printf("Malloc fail\n");
 	    return -1;
 	  }
 
-      }
-
-      strcpy(testLine.stations[0], station);
-      strcpy(testLine.stations[1], station2);
-
-      for (i = 2; !(currentBusLine - nextBusLine); i++) 
-	{
-	  fgets(string, 100, file);
-	  stringFix1(string);
-	  stringFix2(string);
-	  sscanf(string, "%d%s%s%d",  &nextBusLine, station, station2, &testLine.weights[i-1]);
-	  printf("\n%d%d\n", currentBusLine, nextBusLine );
-	  if (currentBusLine == nextBusLine) {
-	    strcpy(testLine.stations[i], station2);
-	  }
 	}
+
+	strcpy(testLine.stations[0], station);
+	strcpy(testLine.stations[1], station2);
+
+	for (i = 2; !(currentBusLine - nextBusLine); i++) 
+	  {
+	    fgets(string, 100, file);
+	    stringFix1(string);
+	    stringFix2(string);
+	    sscanf(string, "%d%s%s%d",  &nextBusLine, station, station2, &testLine.weights[i-1]);
+	    printf("\n%d%d\n", currentBusLine, nextBusLine );
+
+	    if (currentBusLine == nextBusLine) {
+	      strcpy(testLine.stations[i], station2);
+	    }
+	  }
+      }
+    
+  printf("Array:\n0: %s\n", testLine.stations[0]);
+  printf("1: %s, %d\n", testLine.stations[1], testLine.weights[0]);
       
-	
-      printf("Array:\n0: %s\n", testLine.stations[0]);
-      printf("1: %s, %d\n", testLine.stations[1], testLine.weights[0]);
-      
-      printf("2: %s, %d\n", testLine.stations[2], testLine.weights[1]);
-      printf("3: %s, %d\n", testLine.stations[3], testLine.weights[2]);
-      printf("4: %s, %d\n", testLine.stations[4], testLine.weights[3]);
-      printf("5: %s\n", testLine.stations[5]);
+  printf("2: %s, %d\n", testLine.stations[2], testLine.weights[1]);
+  printf("3: %s, %d\n", testLine.stations[3], testLine.weights[2]);
+  printf("4: %s, %d\n", testLine.stations[4], testLine.weights[3]);
+  printf("5: %s\n", testLine.stations[5]);
       
       
-    }
+    
       
   fclose(file);
   return 0;
 }
-
+*/
 
 int main(int argc, char* argv[]) 
 {
   char *buffer;
   buffer =  malloc (sizeof(char) * 100);
 
-  struct busLine testLine;
+  //struct busLine testLine;
 
-  getBusLines (argv[1], buffer, testLine);
+  //getBusLines (argv[1], buffer, testLine);
 
 
 
