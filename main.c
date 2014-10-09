@@ -8,52 +8,8 @@ typedef struct busLine
 {
   int line;
   char *stations[10];
+  int weights[10];
  }busLine;
-
-void getBusLine (char* filename)
-{
-  FILE *file;
-  char string1[100];
-  char string2[100];
-  char* strings[10];
-  int i;
-
-
-  file = fopen(filename, "r");
-  if (file)
-    {
-      fgets(string1, 100, file);
-      fgets(string2, 100, file);
-      printf("%s", string1);
-      strings[0] = string1;
-      
-      for (i = 1; (string1[0] == string2[0]  && string1[1] == string2[1] && string1[2] == string2[2]); i++) 
-	{
-	  strings[1] = string2;
-	  fgets(string2, 100, file);
-
-	  strings[2] = string2;
-	  fgets(string2, 100, file);
-
-
-	  strings[3] = string2;
-	  fgets(string2, 100, file);
-
-
-	  strings[4] = string2;
-	  fgets(string2, 100, file);
-
-	}
-
-      for (int k = 0; k < 5; k++)
-	{
-	  printf("\n%s", strings[k]);
-	}
-
- 
-  }
-  fclose(file);
-}
 
 
 void stringFix2(char* string)
@@ -90,32 +46,7 @@ void stringFix1(char* string)
    
 }
 
-
-
-
-void parseBusLines(char* string, struct busLine testLine)
-{ 
-  char *copy = string;
-
-  int comma = 44;
-  printf("%c\n", comma);
- 
-  char* ptr;
-  ptr = strchr(string, comma);
-  printf("%s\n", ptr+1);
-
-  /*
-  testLine.stations[0] = station;
-
-  printf("%s\n", testLine.stations[0]);
-  */
-
-}
-
-
-
-
-int getBus (char* filename, char* string, struct busLine testLine)
+int getBusLines (char* filename, char* string, struct busLine testLine)
 {
   int currentBusLine;
   int nextBusLine;
@@ -139,7 +70,7 @@ int getBus (char* filename, char* string, struct busLine testLine)
       printf("%s\n", string);
 
 
-      sscanf(string, "%d%s%s%d",  &currentBusLine, station, station2, &weight);
+      sscanf(string, "%d%s%s%d",  &currentBusLine, station, station2, &testLine.weights[0]);
       printf("Original values:\n%d\n%s\n%s\n%d\n", currentBusLine, station, station2, weight);
 
       testLine.line = currentBusLine;
@@ -163,7 +94,7 @@ int getBus (char* filename, char* string, struct busLine testLine)
 	  fgets(string, 100, file);
 	  stringFix1(string);
 	  stringFix2(string);
-	  sscanf(string, "%d%s%s%d",  &nextBusLine, station, station2, &weight);
+	  sscanf(string, "%d%s%s%d",  &nextBusLine, station, station2, &testLine.weights[i-1]);
 	  printf("\n%d%d\n", currentBusLine, nextBusLine );
 	  if (currentBusLine == nextBusLine) {
 	    strcpy(testLine.stations[i], station2);
@@ -172,12 +103,12 @@ int getBus (char* filename, char* string, struct busLine testLine)
       
 	
       printf("Array:\n0: %s\n", testLine.stations[0]);
-      printf("1: %s\n", testLine.stations[1]);
+      printf("1: %s, %d\n", testLine.stations[1], testLine.weights[0]);
       
-      printf("2: %s\n", testLine.stations[2]);
-      printf("3: %s\n", testLine.stations[3]);
-      printf("4: %s\n", testLine.stations[4]);
-      printf("4: %s\n", testLine.stations[5]);
+      printf("2: %s, %d\n", testLine.stations[2], testLine.weights[1]);
+      printf("3: %s, %d\n", testLine.stations[3], testLine.weights[2]);
+      printf("4: %s, %d\n", testLine.stations[4], testLine.weights[3]);
+      printf("5: %s\n", testLine.stations[5]);
       
       
     }
@@ -191,15 +122,10 @@ int main(int argc, char* argv[])
 {
   char *buffer;
   buffer =  malloc (sizeof(char) * 100);
-  /*
-  getBusLine (argv[1]);
-    if (buffer) {
-        free(buffer);
-    }
-  */
+
   struct busLine testLine;
 
-  getBus (argv[1], buffer, testLine);
+  getBusLines (argv[1], buffer, testLine);
 
 
 
