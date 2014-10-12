@@ -5,47 +5,165 @@
 #include <string.h>
 
 
-typedef struct busLine
+typedef struct link
 {
-  int line;
-  char *stations[10];
-  int weights[10];
- }busLine;
+  struct station* node;
+  struct link* next;
+}*Link;
 
 
-Station *stationsOrder[26];
+typedef struct list
+{
+  struct link* first;
+  struct link* last;
+}*List;
+
+List mkList(){
+  List result = malloc(sizeof(struct list));
+  if (!result){ 
+    result->first = NULL;
+    result->last = NULL;
+    return result;
+  }
+  return NULL;
+}
+
+Link mkLink(struct station* data, Link next){
+  Link result = malloc(sizeof(struct link));
+  if (result){
+    result->node = data;
+    result->next = next;
+    return result;
+  }
+  return NULL;
+}
 
 
+int length(List list){
+  int size = 0;
+  Link cursor = list->first;
+  while(!cursor){
+    ++size;
+    cursor = cursor->next;
+  }
+  return size;
+}
+
+int empty(List list){
+  return list->first == NULL;
+}
 
 
-Station stationExist(char* station, Station*){
-
-  for (i = 0; (station == Station[i].station || Station[i].station == NULL); i++) {
-    return &Station[i].station;
+void prepend(List list, struct station* data){
+  list->first = mkLink(data, list->first);
+  if (list->last == NULL) {
+    list->last = list->first;
   }
   
-}   
+}
 
-
-
-void createStation(Station, char* new) { // Bygger noder. 
-
-  int index = (65 - new[0]);
-
-  if (stationsOrder[index]) { // stationExist
-     stationsOrder[index] = malloc(sizeof(Station) * 20);
-
-     *stationsOrder[index] = malloc(sizeof(Station));
-
+void append(List list, struct station* data){
+  if (list->last == NULL) {
+    list->last = list->first = mkLink(data, NULL);
+  } else {
+    list->last = list->last->next = mkLink(data, NULL);
   }
-  else {
+}
+
+struct station* first(List list) {
+  if (empty(list)) {
+    return NULL;
+  } else {
+    return list->first->node;
+  }
+}
+
+struct station* get(List list, int index){
+  Link cursor = list->first;
+  while (cursor && index > 0) {
+    if (index == 0) return (cursor->node);
+    cursor = cursor->next;
+  }
+  return NULL;
+}
+
+Station mkStation(char* name){
+  Station new = malloc(sizeof(struct station));
+  if (new){
+    new->station = name;
+    new->destination = NULL;
+    return new;
+  }
+  return NULL;
+}
+
+
+void createOrderArray(List* stationOrder){
+  int i;
+  stationOrder =  malloc(sizeof(List) * 26);
+
+  for (i = 0; i < 26; i++) {
+    stationOrder[i] = mkList();
+  }
+}
+
+
+struct station* findStation(List list, char* toFind){
+  Link cursor = list->first;
+  while (cursor) {
+    if (strcmp(cursor->node->station, toFind)) return (cursor->node);
+    cursor = cursor->next;
+  }
+  return NULL;
+}
+
+
+/*
+station* stationExist(char* current, station* array){
+  int i;
+  
+  
     
-    if (stationExist(new, *stationsOrder[index])){  // checks if NULL
-      
-    }
-    
+  for (i = 0; (current == array[0] || *(Station[i]).station == NULL); i++) {
+    return &(Station[i]).station;
   }
 
+  if (array)    {
+    printf("%s, %s\n", "not null", current);
+    
+  }
+  else{
+    printf("%s\n", "null");
+
+    
+    array[0].station = malloc(sizeof(char) * strlen(current) +1);
+    strcpy(array[0].station, current);
+    array[0].destination = NULL;
+
+    printf("%s\n", array[0].station);
+    
+  }
+}
+  */
+   
+
+void createStations(char* name, char* name2, List* stationsOrder) { // Bygger noder. 
+  int i;
+  int index = (65 - name[0]);
+  printf("%d\n", index);
+  
+  if (!(stationsOrder[index]->first)){ // if (first == NULL)
+    prepend(stationsOrder[index], mkStation(name));
+    return;
+  }
+  
+  Station ptr = findStation(stationsOrder[index], name);
+  if(!ptr){
+    append(stationsOrder[index], mkStation(name));
+  }
+
+  //  if(!(ptr->destination))   kolla om båda vägarna finns osv.
+    
 }
 
 void stringFix2(char* string)
@@ -161,13 +279,13 @@ int main(int argc, char* argv[])
 {
   char *buffer;
   buffer =  malloc (sizeof(char) * 100);
-
+  char test[] = "Atest";
   //struct busLine testLine;
 
   //getBusLines (argv[1], buffer, testLine);
 
-
-
+  //  stationExist(test, stationsOrder[0]);
+  //  createStation(test);
 
   if (buffer) 
     {
