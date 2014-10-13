@@ -20,7 +20,7 @@ typedef struct list
 
 List mkList(){
   List result = malloc(sizeof(struct list));
-  if (!result){ 
+  if (!result){
     result->first = NULL;
     result->last = NULL;
     return result;
@@ -97,11 +97,22 @@ Station mkStation(char* name){
   return NULL;
 }
 
-/*
-void combineTwo(Station a, Station b){
-  if (a->destination)
+
+void combineTwo(char* a, char* b, List* stationOrder){
+   int index_a = (65 - a[0]);
+   int index_b = (65 - b[0]);
+   Station station_a = findStation(stationOrder[index_a], a);
+   Station station_b = findStation(stationOrder[index_b], b);
+
+  if (!(station_b->destinations) && !(station_a->destinations)) {
+    append(station_b->destinations, station_a);
+    append(station_a->destinations, station_b);
+    return;
+  }
+  
+
 }
-*/
+
 
 void createOrderArray(List* stationOrder){
   int i;
