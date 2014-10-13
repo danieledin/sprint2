@@ -7,7 +7,7 @@
 
 typedef struct link
 {
-  struct station* node;
+  void* node;
   struct link* next;
 }*Link;
 
@@ -28,7 +28,7 @@ List mkList(){
   return NULL;
 }
 
-Link mkLink(struct station* data, Link next){
+Link mkLink(void* data, Link next){
   Link result = malloc(sizeof(struct link));
   if (result){
     result->node = data;
@@ -54,7 +54,7 @@ int empty(List list){
 }
 
 
-void prepend(List list, struct station* data){
+void prepend(List list, void* data){
   list->first = mkLink(data, list->first);
   if (list->last == NULL) {
     list->last = list->first;
@@ -62,7 +62,7 @@ void prepend(List list, struct station* data){
   
 }
 
-void append(List list, struct station* data){
+void append(List list, void* data){
   if (list->last == NULL) {
     list->last = list->first = mkLink(data, NULL);
   } else {
@@ -70,7 +70,7 @@ void append(List list, struct station* data){
   }
 }
 
-struct station* first(List list) {
+void* first(List list) {
   if (empty(list)) {
     return NULL;
   } else {
@@ -78,7 +78,7 @@ struct station* first(List list) {
   }
 }
 
-struct station* get(List list, int index){
+void* get(List list, int index){
   Link cursor = list->first;
   while (cursor && index > 0) {
     if (index == 0) return (cursor->node);
@@ -91,12 +91,17 @@ Station mkStation(char* name){
   Station new = malloc(sizeof(struct station));
   if (new){
     new->station = name;
-    new->destination = NULL;
+    new->destinations = mkList();
     return new;
   }
   return NULL;
 }
 
+/*
+void combineTwo(Station a, Station b){
+  if (a->destination)
+}
+*/
 
 void createOrderArray(List* stationOrder){
   int i;
@@ -110,8 +115,9 @@ void createOrderArray(List* stationOrder){
 
 struct station* findStation(List list, char* toFind){
   Link cursor = list->first;
-  while (cursor) {
-    if (strcmp(cursor->node->station, toFind)) return (cursor->node);
+  struct station *ptr = ((struct station*)cursor->node);
+  while (cursor) {    
+    if (strcmp(ptr->station, toFind)) return (ptr);
     cursor = cursor->next;
   }
   return NULL;
@@ -148,7 +154,7 @@ station* stationExist(char* current, station* array){
    
 
 void createStations(char* name, char* name2, List* stationsOrder) { // Bygger noder. 
-  int i;
+
   int index = (65 - name[0]);
   printf("%d\n", index);
   
@@ -279,7 +285,7 @@ int main(int argc, char* argv[])
 {
   char *buffer;
   buffer =  malloc (sizeof(char) * 100);
-  char test[] = "Atest";
+  //  char test[] = "Atest";
   //struct busLine testLine;
 
   //getBusLines (argv[1], buffer, testLine);
