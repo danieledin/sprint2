@@ -179,9 +179,6 @@ void createStations(char* a, char* b, List* stationsOrder) { // Bygger noder.
   
   combineTwo(a, b, stationsOrder);
 
-
-  //  if(!(ptr->destination))   kolla om båda vägarna finns osv.
-    
 }
 
 void stringFix2(char* string)
