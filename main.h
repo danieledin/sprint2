@@ -13,7 +13,7 @@ typedef struct station {
 
 struct station central;
 
-strscpy(central.station, array[i])
+
 
 void createStation(char*); // Bygger noder.
 station* stationExist(char*, station*); 

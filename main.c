@@ -101,22 +101,22 @@ Station mkStation(char* name){
 void combineTwo(char* a, char* b, List* stationOrder){
    int index_a = (65 - a[0]);
    int index_b = (65 - b[0]);
+
    Station station_a = findStation(stationOrder[index_a], a);
    Station station_b = findStation(stationOrder[index_b], b);
 
-  if (!(station_b->destinations) && !(station_a->destinations)) {
-    append(station_b->destinations, station_a);
-    append(station_a->destinations, station_b);
-    return;
-  }
-  
+   if(!station_a) mkStation(a);
+   if(!station_b) mkStation(b);
+ 
+   prepend(station_b->destinations, station_a);
+   prepend(station_a->destinations, station_b);
 
 }
 
 
 void createOrderArray(List* stationOrder){
   int i;
-  stationOrder =  malloc(sizeof(List) * 26);
+  stationOrder = calloc(26, sizeof(List));
 
   for (i = 0; i < 26; i++) {
     stationOrder[i] = mkList();
@@ -126,7 +126,7 @@ void createOrderArray(List* stationOrder){
 
 struct station* findStation(List list, char* toFind){
   Link cursor = list->first;
-  struct station *ptr = ((struct station*)cursor->node);
+  struct station *ptr = (struct station*)(cursor->node);
   while (cursor) {    
     if (strcmp(ptr->station, toFind)) return (ptr);
     cursor = cursor->next;
@@ -164,20 +164,21 @@ station* stationExist(char* current, station* array){
   */
    
 
-void createStations(char* name, char* name2, List* stationsOrder) { // Bygger noder. 
+void createStations(char* a, char* b, List* stationsOrder) { // Bygger noder. 
 
-  int index = (65 - name[0]);
-  printf("%d\n", index);
-  
-  if (!(stationsOrder[index]->first)){ // if (first == NULL)
-    prepend(stationsOrder[index], mkStation(name));
-    return;
+  int index_a = (65 - a[0]);
+  int index_b = (65 - b[0]);
+
+  if (!(stationsOrder[index_a]->first)){ 
+    prepend(stationsOrder[index_a], mkStation(a));
   }
   
-  Station ptr = findStation(stationsOrder[index], name);
-  if(!ptr){
-    append(stationsOrder[index], mkStation(name));
+  if (!(stationsOrder[index_b]->first)){ 
+    prepend(stationsOrder[index_b], mkStation(b));
   }
+  
+  combineTwo(a, b, stationsOrder);
+
 
   //  if(!(ptr->destination))   kolla om båda vägarna finns osv.
     
